@@ -16,6 +16,26 @@ public class Main{
         result = Math.max(10,20);
         result = Math.min(10,20);
 
-        System.out.println(result);
+//        System.out.println(result);
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("How many fruits do you want to add: ");
+
+        int amountOfFruits = scanner.nextInt();
+
+        scanner.nextLine();
+
+        String[] fruitsList = new String[amountOfFruits];
+        int i = 0;
+        while(i < fruitsList.length){
+            System.out.print("Enter the food you want to add: ");
+            String fruit = scanner.nextLine();
+            fruitsList[i] = fruit;
+            i++;
+        }
+        for(String fruit : fruitsList){
+            System.out.println(fruit);
+        }
     }
 }
