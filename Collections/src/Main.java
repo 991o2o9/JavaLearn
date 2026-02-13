@@ -3,8 +3,8 @@ import java.util.Scanner;
 
 public class Main {
   public static void main(String[] args){
+    String ADMIN = "admin123";
     Scanner scanner = new Scanner(System.in);
-
 
     Product p1 = new Product("Bread", 3.50,10);
     Product p2 = new Product("Coffee", 10.70,20);
@@ -18,112 +18,74 @@ public class Main {
     supermarket.addProduct(p3);
     supermarket.addProduct(p4);
 
-    supermarket.showProducts();
-    supermarket.buyProduct("Bread",8);
-    supermarket.showProducts();
-    supermarket.getTotalValue();
+    System.out.println("_____________________");
+    System.out.println("Welcome to 7-Eleven");
+    System.out.println("_____________________");
+
+    System.out.print("Enter password (или Enter для покупателя): ");
+    String passwordInput = scanner.nextLine();
+
+    boolean isManager = passwordInput.equals(ADMIN);
+
     boolean isRunning = true;
     while (isRunning){
-
-    }
-  }
-}
-
-class Product {
-  private String name;
-  private double price;
-  private int quantity;
-
-  public Product(String name, double price,int quantity){
-    this.name = name;
-    this.price = price;
-    this.quantity = quantity;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public double getPrice() {
-    return price;
-  }
-
-  public void setPrice(double price) {
-    this.price = price;
-  }
-
-  public int getQuantity() {
-    return quantity;
-  }
-
-  public void setQuantity(int quantity) {
-    this.quantity = quantity;
-  }
-
-  @Override
-  public String toString(){
-    return name + " - $" + price + " - " + quantity;
-  }
-}
-
-class Supermarket{
-  ArrayList<Product> products;
-
-  public Supermarket() {
-     products = new ArrayList<>();
-  }
-
-  public Product findProductByName(String name) {
-    for (Product prod : products) {
-      if (prod.getName().equalsIgnoreCase(name)) {
-        return prod;
+      System.out.println("\n________________________________________");
+      if (isManager){
+        System.out.println("Glad to see you, MANAGER!");
+        System.out.println("(1) - Show All Products");
+        System.out.println("(2) - Add product");
+        System.out.println("(3) - Get total price of all products");
+        System.out.println("(0) - Exit");
+      }
+      else {
+        System.out.println("Glad to see you customer!");
+        System.out.println("(1) - Show All Products");
+        System.out.println("(2) - Buy Product");
+        System.out.println("(0) - Exit");
+      }
+      System.out.println("________________________________________");
+      System.out.print("\nEnter you choice: ");
+      String choice = scanner.nextLine();
+      System.out.println();
+      if (isManager){
+        switch (choice){
+          case "1" -> supermarket.showProducts();
+          case "2" -> {
+            System.out.print("Enter product name: ");
+            String prTitle = scanner.nextLine();
+            System.out.print("Enter " + prTitle + " price: ");
+            double prPrice = scanner.nextDouble();
+            System.out.print("Enter " + prTitle + " amount to add: ");
+            int prQuantity = scanner.nextInt();
+            scanner.nextLine();
+            supermarket.addProduct(new Product(prTitle,prPrice,prQuantity));
+          }
+          case "3" -> supermarket.getTotalValue();
+          case "0"->{
+            System.out.println("Thank you!");
+            isRunning = false;
+          }
+          default -> System.out.println("Unsupported choice, try again");
+          }
+        }
+      else{
+        switch (choice){
+          case "1" -> supermarket.showProducts();
+          case "2" -> {
+            System.out.print("Enter product you want to buy: ");
+            String prTitle = scanner.nextLine();
+            System.out.print("Enter the amount: ");
+            int prAmount = scanner.nextInt();
+            scanner.nextLine();
+            supermarket.buyProduct(prTitle,prAmount);
+          }
+          case "0" ->{
+            System.out.println("Thank you!");
+            isRunning = false;
+          }
+          default -> System.out.println("Unsupported choice, try again");
+        }
       }
     }
-    return null;
-  }
-
-  public void addProduct(Product product){
-    if (product == null){
-      return;
-    }
-    Product foundProduct = findProductByName(product.getName());
-    if (foundProduct != null){
-      foundProduct.setQuantity(foundProduct.getQuantity() + product.getQuantity());
-    }
-    else {
-      products.add(product);
-    }
-  }
-
-  public void showProducts(){
-    if (products.isEmpty()){
-      System.out.println("No Products");
-    }
-    for (Product prod : products){
-      System.out.println(prod);
-    }
-  }
-
-  public void buyProduct(String name, int amount){
-    Product foundProduct = this.findProductByName(name);
-    if (foundProduct == null){
-      System.out.println("Product not found");
-    }
-    if (amount > foundProduct.getQuantity()){
-      System.out.println("We don't have this amount of " + name);
-    }
-    foundProduct.setQuantity(foundProduct.getQuantity() - amount);
-  }
-
-  public void getTotalValue(){
-    double sumOfProducts = 0;
-    for (Product prod : products){
-      sumOfProducts += prod.getPrice();
-    }
-    System.out.println("Total price of all products is: $" + sumOfProducts);
   }
 }
