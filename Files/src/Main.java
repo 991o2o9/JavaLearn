@@ -11,7 +11,7 @@ public class Main {
             ROCKING EVERYWHERE
             """;
 
-    try(FileWriter writer = new FileWriter(filePath);) {
+    try(FileWriter writer = new FileWriter(filePath);) {$
       writer.write(textContent);
       System.out.println("File has been written");
     }
